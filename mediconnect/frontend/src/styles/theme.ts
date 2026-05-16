@@ -1,0 +1,21 @@
+export const theme = {
+  colors: {
+    primary: '#3ab07a',
+    primaryDark: '#2d8c5e',
+    primaryLight: '#f0faf5',
+    primaryBorder: '#b2dfcb',
+    white: '#ffffff',
+    background: '#f4faf7',
+    sidebarBg: '#1c4f35',
+    sidebarActive: 'rgba(255,255,255,0.12)',
+    sidebarText: '#c8e6d6',
+    text: '#1a2e28',
+    textSecondary: '#5f7870',
+    error: '#c0392b',
+    errorBg: '#fff0ee',
+    border: '#e2ece7',
+    cardShadow: '0 1px 4px rgba(0,0,0,0.07)',
+  },
+  borderRadius: '8px',
+  font: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+};
