@@ -5,13 +5,23 @@ import { theme } from '../styles/theme';
 const navItems = [
   { label: 'Dashboard', path: '/dashboard' },
   { label: 'Diseases', path: '/dashboard' },
+  { label: 'Hospitals', path: '/dashboard' },
+  { label: 'Doctors', path: '/dashboard' },
   { label: 'Appointments', path: '/dashboard' },
+  { label: 'Chat', path: '/chat' },
   { label: 'Profile', path: '/dashboard' },
 ];
 
 const SideNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isActive = (item: { label: string; path: string }) => {
+    if (item.label === 'Chat') {
+      return location.pathname === '/chat';
+    }
+    return location.pathname === item.path && item.label === 'Dashboard';
+  };
 
   return (
     <aside style={{
@@ -29,7 +39,7 @@ const SideNav = () => {
 
       <nav style={{ padding: '12px 10px', flex: 1 }}>
         {navItems.map(item => {
-          const isActive = location.pathname === item.path && item.label === 'Dashboard';
+          const active = isActive(item);
           return (
             <div
               key={item.label}
@@ -40,9 +50,9 @@ const SideNav = () => {
                 cursor: 'pointer',
                 marginBottom: '2px',
                 fontSize: '13px',
-                color: isActive ? 'white' : theme.colors.sidebarText,
-                backgroundColor: isActive ? theme.colors.sidebarActive : 'transparent',
-                fontWeight: isActive ? '500' : '400',
+                color: active ? 'white' : theme.colors.sidebarText,
+                backgroundColor: active ? theme.colors.sidebarActive : 'transparent',
+                fontWeight: active ? '500' : '400',
               }}
             >
               {item.label}

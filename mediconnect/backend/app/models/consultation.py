@@ -16,4 +16,3 @@ class Consultation(Base):
     notes       = Column(Text, nullable=True)
     created_at  = Column(DateTime, default=datetime.utcnow)
     updated_at  = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-s

@@ -1,14 +1,17 @@
-import React from 'react';
+﻿import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ChatProvider } from './context/ChatContext';
 import AppRoutes from './routes';
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <ChatProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </ChatProvider>
     </AuthProvider>
   );
 }

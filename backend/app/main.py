@@ -7,13 +7,15 @@ from app.db.database import engine, Base
 from app.models.user import User
 from app.models.appointment import Appointment
 from app.models.doctor import Doctor  # only if you have it
-# from app.models.disease import Disease  # if exists
+from app.models.disease import Disease  # if exists
+from app.models.message import Message  # ADD THIS for chat
 
 # routers
 from app.routes.auth import router as auth_router
 from app.routes.doctors import router as doctors_router
 from app.routes.diseases import router as diseases_router
 from app.routes.appointments import router as appointments_router
+from app.routes.chat import router as chat_router  # ADD THIS for chat
 
 
 Base.metadata.create_all(bind=engine)
@@ -32,6 +34,7 @@ app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(doctors_router, prefix="/doctors", tags=["Doctors"])
 app.include_router(diseases_router, prefix="/diseases", tags=["Diseases"])
 app.include_router(appointments_router, prefix="/appointments", tags=["Appointments"])
+app.include_router(chat_router, prefix="/chat", tags=["Chat"])  # ADD THIS
 
 
 @app.get("/")

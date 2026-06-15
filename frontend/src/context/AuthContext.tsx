@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface User {
   id: number;
@@ -23,24 +23,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const tryRefresh = async () => {
-      try {
-        const res = await fetch(`${API}/auth/refresh`, {
-          method: 'POST',
-          credentials: 'include',
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const payload = JSON.parse(atob(data.access_token.split('.')[1]));
-          setUser({ id: 0, name: payload.name || payload.sub, email: payload.sub, role: payload.role });
-        }
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    tryRefresh();
+    // Try to restore user from localStorage on page refresh
+    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('access_token');
+    
+    if (storedUser && storedToken) {
+      setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -57,7 +47,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const data = await res.json();
-    setUser(data.user);
+    const userData = data.user;
+    
+    setUser(userData);
+    
+    // Save to localStorage
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('user_id', userData.id.toString());
+    localStorage.setItem('user_role', userData.role);
+    localStorage.setItem('user_name', userData.name);
+    
+    console.log('Login successful - user saved:', userData);
   };
 
   const logout = async () => {
@@ -68,6 +69,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
     } finally {
       setUser(null);
+      // Clear localStorage
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('user_id');
+      localStorage.removeItem('user_role');
+      localStorage.removeItem('user_name');
     }
   };
 

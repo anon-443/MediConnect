@@ -32,7 +32,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (res.ok) {
           const data = await res.json();
           const payload = JSON.parse(atob(data.access_token.split('.')[1]));
-          setUser({ id: 0, name: payload.name || payload.sub, email: payload.sub, role: payload.role });
+          const userData = { id: 0, name: payload.name || payload.sub, email: payload.sub, role: payload.role };
+          setUser(userData);
+          // Save to localStorage for chat
+          localStorage.setItem('access_token', data.access_token);
+          localStorage.setItem('user_id', userData.id.toString());
+          localStorage.setItem('user_role', userData.role);
+          localStorage.setItem('user_name', userData.name);
         }
       } catch {
         setUser(null);
@@ -57,7 +63,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const data = await res.json();
-    setUser(data.user);
+    const userData = data.user;
+    setUser(userData);
+    
+    // Save to localStorage for chat
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('user_id', userData.id.toString());
+    localStorage.setItem('user_role', userData.role);
+    localStorage.setItem('user_name', userData.name);
   };
 
   const logout = async () => {
@@ -68,6 +81,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
     } finally {
       setUser(null);
+      // Clear localStorage on logout
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user_id');
+      localStorage.removeItem('user_role');
+      localStorage.removeItem('user_name');
     }
   };
 
